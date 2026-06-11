@@ -1,0 +1,10 @@
+{
+  "name": "rcnk-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RCNK Tracker — a two-person task tracker PWA.",
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
+}

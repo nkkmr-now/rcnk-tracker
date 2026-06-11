@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <title>RCNK Tracker — Design Preview</title>
+  <meta name="theme-color" content="#f5f2ec" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="RCNK" />
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+/* ═══════════════════════════════════════════════════════════════
+   RCNK Tracker — a tracker built for exactly two people.
+   The whole design rests on one idea: two humans, two colours.
+   Nikhil = teal. Rukmini = clay. Colour tells you whose it is.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --paper: #f5f2ec;
+  --paper-raised: #fbf9f4;
+  --ink: #16150f;
+  --muted: #6e685c;
+  --line: #ddd7cb;
+  --line-soft: #e9e4d9;
+
+  --nikhil: #14706a;
+  --nikhil-soft: #d7e6e3;
+  --rukmini: #c9533b;
+  --rukmini-soft: #f3ddd5;
+
+  --overdue: #b03a2e;
+  --ok: #14706a;
+
+  --r-lg: 18px;
+  --r-md: 13px;
+  --r-sm: 9px;
+
+  --shadow: 0 1px 0 rgba(22, 21, 15, 0.04), 0 6px 22px -14px rgba(22, 21, 15, 0.28);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  max-width: 540px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .display { font-family: "Bricolage Grotesque", "Inter", sans-serif; }
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea, select {
+  font-family: inherit; font-size: 16px; color: var(--ink);
+  background: var(--paper-raised);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 14px 14px;
+  width: 100%;
+  outline: none;
+  transition: border-color .15s ease;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--ink); }
+textarea { resize: none; min-height: 78px; line-height: 1.45; }
+label { display: block; font-size: 12.5px; font-weight: 600; letter-spacing: .02em; color: var(--muted); margin: 0 0 7px 2px; text-transform: uppercase; }
+
+.hidden { display: none !important; }
+
+/* ── Login ─────────────────────────────────────────────── */
+#login {
+  min-height: 100dvh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 32px 26px calc(32px + env(safe-area-inset-bottom));
+  gap: 26px;
+}
+.brand-lockup { text-align: center; }
+.wordmark {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 800; font-size: 13vw; line-height: .9; letter-spacing: -.04em;
+}
+@media (min-width: 480px) { .wordmark { font-size: 62px; } }
+.wordmark .rk { color: var(--rukmini); }
+.wordmark .nk { color: var(--nikhil); }
+.brand-sub { margin-top: 12px; color: var(--muted); font-size: 14px; letter-spacing: .01em; }
+
+.login-card { display: flex; flex-direction: column; gap: 16px; }
+.who { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.who-btn {
+  border: 1.5px solid var(--line);
+  background: var(--paper-raised);
+  border-radius: var(--r-lg);
+  padding: 20px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.who-btn:active { transform: scale(.97); }
+.who-btn.sel { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.who-btn .avatar { width: 46px; height: 46px; }
+.who-btn .who-name { font-weight: 600; font-size: 16px; }
+
+.avatar {
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: "Bricolage Grotesque", sans-serif; font-weight: 700;
+  color: #fff;
+}
+.avatar.nikhil { background: var(--nikhil); }
+.avatar.rukmini { background: var(--rukmini); }
+
+.btn-primary {
+  background: var(--ink); color: var(--paper);
+  border-radius: var(--r-lg); padding: 16px; font-size: 16px; font-weight: 600;
+  letter-spacing: .01em; transition: transform .12s ease, opacity .12s ease;
+}
+.btn-primary:active { transform: scale(.98); }
+.btn-primary:disabled { opacity: .4; }
+.login-err { color: var(--overdue); font-size: 13.5px; text-align: center; min-height: 18px; font-weight: 500; }
+
+/* ── App shell ─────────────────────────────────────────── */
+#app { padding-bottom: calc(86px + env(safe-area-inset-bottom)); }
+
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  border-bottom: 1px solid var(--line-soft);
+  padding: calc(14px + env(safe-area-inset-top)) 20px 14px;
+}
+.topbar-row { display: flex; align-items: center; justify-content: space-between; }
+.topbar .wm { font-family: "Bricolage Grotesque"; font-weight: 800; font-size: 19px; letter-spacing: -.03em; }
+.topbar .wm .rk { color: var(--rukmini); } .topbar .wm .nk { color: var(--nikhil); }
+.topbar-actions { display: flex; align-items: center; gap: 6px; }
+.icon-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: grid; place-items: center; color: var(--muted);
+  border: 1.5px solid var(--line);
+}
+.icon-btn.alert { border-color: var(--rukmini); color: var(--rukmini); }
+.icon-btn svg { width: 18px; height: 18px; }
+
+/* ── The signature: dual pulse ─────────────────────────── */
+.pulse {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  padding: 16px 20px 4px;
+}
+.pulse-card {
+  background: var(--paper-raised);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 14px 15px 13px;
+  position: relative; overflow: hidden;
+}
+.pulse-card.me { border-color: var(--ink); }
+.pulse-head { display: flex; align-items: center; gap: 9px; margin-bottom: 11px; }
+.pulse-head .avatar { width: 26px; height: 26px; font-size: 12px; }
+.pulse-head .pn { font-weight: 600; font-size: 14px; }
+.pulse-head .you { font-size: 10.5px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+.pulse-count { font-family: "Bricolage Grotesque"; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.pulse-count .big { font-size: 34px; }
+.pulse-count .small { font-size: 16px; color: var(--muted); }
+.pulse-label { font-size: 11.5px; color: var(--muted); margin-top: 5px; letter-spacing: .01em; }
+.pulse-bar { height: 6px; border-radius: 99px; background: var(--line); margin-top: 11px; overflow: hidden; }
+.pulse-bar > span { display: block; height: 100%; border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.1,1); }
+.pulse-card.nikhil-bar .pulse-bar > span { background: var(--nikhil); }
+.pulse-card.rukmini-bar .pulse-bar > span { background: var(--rukmini); }
+.pulse-clear { font-size: 11.5px; color: var(--ok); font-weight: 600; margin-top: 5px; }
+
+/* ── Segmented filter ──────────────────────────────────── */
+.segment {
+  display: flex; gap: 4px; margin: 16px 20px 4px;
+  background: var(--line-soft); border-radius: var(--r-md); padding: 4px;
+}
+.segment button {
+  flex: 1; padding: 9px 6px; border-radius: 9px; font-size: 13.5px; font-weight: 600;
+  color: var(--muted); transition: background .15s ease, color .15s ease;
+}
+.segment button.on { background: var(--paper-raised); color: var(--ink); box-shadow: var(--shadow); }
+
+/* ── Task list ─────────────────────────────────────────── */
+.list { padding: 8px 20px 30px; display: flex; flex-direction: column; gap: 22px; }
+.group-head {
+  display: flex; align-items: baseline; gap: 8px; margin: 4px 2px 0;
+}
+.group-head .gt { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.group-head.overdue .gt { color: var(--overdue); }
+.group-head .gc { font-size: 12px; color: var(--muted); font-weight: 600; }
+.group-items { display: flex; flex-direction: column; gap: 9px; margin-top: 10px; }
+
+.task {
+  display: flex; align-items: flex-start; gap: 13px;
+  background: var(--paper-raised);
+  border: 1.5px solid var(--line);
+  border-left-width: 4px;
+  border-radius: var(--r-md);
+  padding: 14px 14px 14px 13px;
+  box-shadow: var(--shadow);
+  transition: opacity .2s ease, transform .12s ease;
+}
+.task:active { transform: scale(.992); }
+.task.assignee-nikhil { border-left-color: var(--nikhil); }
+.task.assignee-rukmini { border-left-color: var(--rukmini); }
+.task.done { opacity: .52; }
+.task.done .task-title { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+
+.check {
+  flex-shrink: 0; width: 24px; height: 24px; margin-top: 1px;
+  border-radius: 50%; border: 2px solid var(--line);
+  display: grid; place-items: center; transition: all .18s ease;
+}
+.check svg { width: 13px; height: 13px; opacity: 0; transform: scale(.5); transition: all .18s ease; stroke: #fff; }
+.task.assignee-nikhil .check.on { background: var(--nikhil); border-color: var(--nikhil); }
+.task.assignee-rukmini .check.on { background: var(--rukmini); border-color: var(--rukmini); }
+.check.on svg { opacity: 1; transform: scale(1); }
+
+.task-body { flex: 1; min-width: 0; }
+.task-title { font-size: 15.5px; font-weight: 500; line-height: 1.35; word-break: break-word; }
+.task-notes { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.4; word-break: break-word; }
+.task-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; margin-top: 9px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 600; color: var(--muted);
+  background: var(--paper); border: 1px solid var(--line-soft);
+  padding: 3px 8px; border-radius: 99px;
+}
+.chip.due-over { color: var(--overdue); border-color: var(--rukmini-soft); background: var(--rukmini-soft); }
+.chip .dot { width: 13px; height: 13px; border-radius: 50%; font-size: 8px; color: #fff; display: grid; place-items: center; font-family: "Bricolage Grotesque"; font-weight: 700; }
+.chip .dot.nikhil { background: var(--nikhil); } .chip .dot.rukmini { background: var(--rukmini); }
+.task-del { flex-shrink: 0; color: var(--line); width: 26px; height: 26px; display: grid; place-items: center; margin: -4px -4px 0 0; }
+.task-del svg { width: 15px; height: 15px; }
+.task-del:active { color: var(--overdue); }
+
+/* ── Empty state ───────────────────────────────────────── */
+.empty { text-align: center; padding: 60px 30px; color: var(--muted); }
+.empty .em-mark { font-family: "Bricolage Grotesque"; font-weight: 800; font-size: 30px; color: var(--line); letter-spacing: -.03em; }
+.empty .em-line { margin-top: 10px; font-size: 14.5px; line-height: 1.5; }
+
+/* ── Assign tab ────────────────────────────────────────── */
+.assign-wrap { padding: 18px 20px 40px; display: flex; flex-direction: column; gap: 18px; }
+.assign-title { font-family: "Bricolage Grotesque"; font-weight: 800; font-size: 26px; letter-spacing: -.03em; }
+.assign-title .accent { color: var(--rukmini); }
+.field { display: flex; flex-direction: column; }
+.who-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.who-pick button {
+  border: 1.5px solid var(--line); border-radius: var(--r-md); padding: 13px;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  font-weight: 600; font-size: 15px; color: var(--muted);
+  background: var(--paper-raised); transition: all .14s ease;
+}
+.who-pick button .avatar { width: 26px; height: 26px; font-size: 12px; }
+.who-pick button.pick-nikhil.on { border-color: var(--nikhil); color: var(--nikhil); background: var(--nikhil-soft); }
+.who-pick button.pick-rukmini.on { border-color: var(--rukmini); color: var(--rukmini); background: var(--rukmini-soft); }
+.dt-row { display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px; }
+.dt-quick { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 9px; }
+.dt-quick button { font-size: 12.5px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; }
+.dt-quick button:active { border-color: var(--ink); color: var(--ink); }
+.assign-send { margin-top: 4px; }
+
+/* ── Bottom nav ────────────────────────────────────────── */
+.tabbar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 540px; z-index: 30;
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: color-mix(in srgb, var(--paper-raised) 92%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-top: 1px solid var(--line);
+  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+}
+.tab {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 8px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .01em;
+}
+.tab svg { width: 23px; height: 23px; }
+.tab.on { color: var(--ink); }
+
+/* ── Toast ─────────────────────────────────────────────── */
+.toast {
+  position: fixed; left: 50%; bottom: calc(104px + env(safe-area-inset-bottom));
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--paper);
+  padding: 12px 18px; border-radius: 99px; font-size: 13.5px; font-weight: 500;
+  z-index: 50; opacity: 0; pointer-events: none; transition: all .28s cubic-bezier(.2,.8,.2,1);
+  max-width: 88%; text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Notification banner ───────────────────────────────── */
+.notif-banner {
+  margin: 14px 20px 0; padding: 13px 15px;
+  background: var(--ink); color: var(--paper);
+  border-radius: var(--r-md); display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow);
+}
+.notif-banner .nb-text { flex: 1; font-size: 13px; line-height: 1.4; }
+.notif-banner .nb-text b { font-weight: 700; }
+.notif-banner button {
+  background: var(--paper); color: var(--ink); font-weight: 700; font-size: 12.5px;
+  padding: 8px 13px; border-radius: 99px; white-space: nowrap;
+}
+.notif-banner .nb-close { background: transparent; color: var(--paper); opacity: .6; padding: 4px; font-size: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* ── Completed history ─────────────────────────────────── */
+.completed-group { margin-top: 4px; }
+.completed-toggle {
+  width: 100%; display: flex; align-items: center; gap: 8px;
+  padding: 11px 2px; color: var(--muted);
+}
+.completed-toggle .gt { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.completed-toggle .gc { font-size: 12px; font-weight: 600; }
+.completed-toggle .chev { width: 16px; height: 16px; margin-left: auto; transition: transform .2s ease; }
+.completed-toggle.open .chev { transform: rotate(180deg); }
+.completed-group .group-items { margin-top: 2px; }
+
+.task-remark {
+  font-size: 13px; color: var(--ink); margin-top: 6px; line-height: 1.4;
+  padding-left: 11px; border-left: 2px solid var(--line);
+  word-break: break-word; opacity: .85;
+}
+.chip.done-chip { color: var(--ok); border-color: var(--nikhil-soft); background: var(--nikhil-soft); }
+.task.assignee-rukmini .task-remark { border-left-color: var(--rukmini-soft); }
+
+.empty.mini { padding: 18px 10px 4px; }
+.empty.mini .em-line { font-size: 13.5px; }
+
+/* ── Remark sheet ──────────────────────────────────────── */
+.sheet-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(22, 21, 15, 0.42);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; transition: opacity .22s ease;
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+}
+.sheet-overlay.show { opacity: 1; }
+.sheet {
+  width: 100%; max-width: 540px;
+  background: var(--paper); border-radius: 22px 22px 0 0;
+  padding: 12px 22px calc(22px + env(safe-area-inset-bottom));
+  transform: translateY(100%); transition: transform .26s cubic-bezier(.2,.8,.2,1);
+  box-shadow: 0 -10px 40px -12px rgba(22,21,15,.4);
+}
+.sheet-overlay.show .sheet { transform: translateY(0); }
+.sheet-grip { width: 38px; height: 4px; border-radius: 99px; background: var(--line); margin: 0 auto 16px; }
+.sheet-title { font-family: "Bricolage Grotesque"; font-weight: 800; font-size: 21px; letter-spacing: -.02em; }
+.sheet-task {
+  font-size: 14px; color: var(--muted); margin: 6px 0 16px; line-height: 1.4;
+  padding: 10px 13px; background: var(--paper-raised); border: 1px solid var(--line-soft);
+  border-radius: var(--r-md); font-weight: 500;
+}
+.sheet textarea { min-height: 92px; }
+.sheet-actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-top: 16px; }
+.sheet-cancel {
+  border: 1.5px solid var(--line); border-radius: var(--r-md); padding: 15px;
+  font-weight: 600; font-size: 15px; color: var(--muted); background: var(--paper-raised);
+}
+.sheet-confirm {
+  background: var(--ink); color: var(--paper); border-radius: var(--r-md); padding: 15px;
+  font-weight: 600; font-size: 15px; transition: opacity .15s ease, transform .12s ease;
+}
+.sheet-confirm:active { transform: scale(.98); }
+.sheet-confirm:disabled { opacity: .35; }
+
+</style>
+</head>
+<body>
+
+  <!-- ── Login ────────────────────────────────────────── -->
+  <section id="login">
+    <div class="brand-lockup">
+      <div class="wordmark"><span class="rk">RC</span><span class="nk">NK</span></div>
+      <div class="brand-sub">Two people. Everything tracked.</div>
+    </div>
+    <div class="login-card">
+      <div class="field">
+        <label>Who are you?</label>
+        <div class="who">
+          <button class="who-btn" data-who="rukmini" type="button">
+            <span class="avatar rukmini">R</span>
+            <span class="who-name">Rukmini</span>
+          </button>
+          <button class="who-btn" data-who="nikhil" type="button">
+            <span class="avatar nikhil">N</span>
+            <span class="who-name">Nikhil</span>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="login-pass" type="password" inputmode="text" autocomplete="off" placeholder="Shared password" />
+      </div>
+      <div class="login-err" id="login-err"></div>
+      <button class="btn-primary" id="login-go" type="button" disabled>Enter</button>
+    </div>
+  </section>
+
+  <!-- ── App ──────────────────────────────────────────── -->
+  <main id="app" class="hidden">
+    <header class="topbar">
+      <div class="topbar-row">
+        <div class="wm"><span class="rk">RC</span><span class="nk">NK</span></div>
+        <div class="topbar-actions">
+          <button class="icon-btn" id="bell-btn" title="Notifications" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </button>
+          <button class="icon-btn" id="logout-btn" title="Switch person" type="button" aria-label="Switch person">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Notifications prompt (shown only when not yet enabled) -->
+    <div class="notif-banner hidden" id="notif-banner">
+      <div class="nb-text"><b>Turn on alerts</b> — get pinged the moment a task lands or comes due.</div>
+      <button id="notif-enable" type="button">Enable</button>
+      <button class="nb-close" id="notif-dismiss" type="button" aria-label="Dismiss">×</button>
+    </div>
+
+    <!-- TAB: Today -->
+    <section id="tab-today">
+      <div class="pulse" id="pulse"></div>
+      <div class="segment" id="segment">
+        <button data-seg="mine" class="on" type="button">Mine</button>
+        <button data-seg="theirs" type="button">Theirs</button>
+        <button data-seg="all" type="button">All</button>
+      </div>
+      <div class="list" id="task-list"></div>
+    </section>
+
+    <!-- TAB: Assign -->
+    <section id="tab-assign" class="hidden">
+      <div class="assign-wrap">
+        <div class="assign-title">Create &amp; <span class="accent">assign</span></div>
+        <div class="field">
+          <label>Task</label>
+          <input id="f-title" type="text" placeholder="What needs doing?" />
+        </div>
+        <div class="field">
+          <label>Notes <span style="text-transform:none;font-weight:500">(optional)</span></label>
+          <textarea id="f-notes" placeholder="Any detail worth adding…"></textarea>
+        </div>
+        <div class="field">
+          <label>Assign to</label>
+          <div class="who-pick" id="f-assignee">
+            <button class="pick-rukmini" data-pick="rukmini" type="button"><span class="avatar rukmini">R</span>Rukmini</button>
+            <button class="pick-nikhil" data-pick="nikhil" type="button"><span class="avatar nikhil">N</span>Nikhil</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Due <span style="text-transform:none;font-weight:500">(optional)</span></label>
+          <div class="dt-row">
+            <input id="f-date" type="date" />
+            <input id="f-time" type="time" />
+          </div>
+          <div class="dt-quick" id="f-quick">
+            <button data-q="today" type="button">Today 6pm</button>
+            <button data-q="tomorrow" type="button">Tomorrow 9am</button>
+            <button data-q="clear" type="button">No date</button>
+          </div>
+        </div>
+        <button class="btn-primary assign-send" id="f-send" type="button">Assign task</button>
+      </div>
+    </section>
+
+    <nav class="tabbar">
+      <button class="tab on" data-tab="today" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Today
+      </button>
+      <button class="tab" data-tab="assign" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Assign
+      </button>
+    </nav>
+  </main>
+
+  <!-- Remark sheet — required note when completing a task -->
+  <div class="sheet-overlay hidden" id="remark-sheet">
+    <div class="sheet">
+      <div class="sheet-grip"></div>
+      <div class="sheet-title">Complete this task</div>
+      <div class="sheet-task" id="remark-task"></div>
+      <label for="remark-input">Remarks (required)</label>
+      <textarea id="remark-input" placeholder="What got done? Any note worth keeping on record…"></textarea>
+      <div class="sheet-actions">
+        <button class="sheet-cancel" id="remark-cancel" type="button">Cancel</button>
+        <button class="sheet-confirm" id="remark-confirm" type="button" disabled>Mark complete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+
+const PEOPLE = {
+  rukmini:{id:"rukmini",name:"Rukmini",short:"R",cls:"rukmini"},
+  nikhil:{id:"nikhil",name:"Nikhil",short:"N",cls:"nikhil"},
+};
+const other=(id)=>id==="nikhil"?"rukmini":"nikhil";
+const $=(s)=>document.querySelector(s);
+function iso(daysFromNow,h,m){const d=new Date();d.setDate(d.getDate()+daysFromNow);d.setHours(h,m,0,0);return d.toISOString();}
+const state={me:null,segment:"mine",loginWho:null,showCompleted:false,tasks:[
+  {id:"1",title:"Send Zoiro reel #3 cut to client",notes:"Lounge pillar — invisible cuts pass",assignee:"nikhil",created_by:"rukmini",due_at:iso(0,18,0),done:false,done_at:null,remark:null},
+  {id:"2",title:"Würfel AËR deck — final 3 slides",assignee:"nikhil",created_by:"nikhil",due_at:iso(-1,17,0),done:false,done_at:null,remark:null},
+  {id:"3",title:"Confirm Mansion Delhi venue walkthrough",assignee:"rukmini",created_by:"nikhil",due_at:iso(0,11,0),done:true,done_at:iso(0,9,30),remark:"Walkthrough locked for Fri 3pm. Sent calendar invite to both."},
+  {id:"4",title:"Draft APU credentials one-pager",assignee:"rukmini",created_by:"rukmini",due_at:null,done:false,done_at:null,remark:null},
+  {id:"5",title:"Book editor for Father's Day cut",assignee:"nikhil",created_by:"rukmini",due_at:iso(1,9,0),done:false,done_at:null,remark:null},
+  {id:"6",title:"Pay freelancer invoice (paid media)",assignee:"rukmini",created_by:"rukmini",due_at:iso(0,16,0),done:false,done_at:null,remark:null},
+  {id:"7",title:"Approve Zoiro logline batch",assignee:"nikhil",created_by:"rukmini",due_at:iso(-2,12,0),done:true,done_at:iso(-2,11,15),remark:"Approved 6 of 8. Sent two back for lowercase text fixes."},
+  {id:"8",title:"Würfel June calendar — chapter 2 copy",assignee:"rukmini",created_by:"nikhil",due_at:iso(-3,18,0),done:true,done_at:iso(-3,16,40),remark:"Drafted all 4 posts, charcoal/brass tone held. In review folder."},
+]};
+
+if(state.me)enterApp(); else showLogin();
+function showLogin(){$("#login").classList.remove("hidden");$("#app").classList.add("hidden");}
+document.querySelectorAll(".who-btn").forEach((b)=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".who-btn").forEach((x)=>x.classList.remove("sel"));
+  b.classList.add("sel");state.loginWho=b.dataset.who;
+  $("#login-go").disabled=!(state.loginWho&&$("#login-pass").value.length>0);$("#login-err").textContent="";
+}));
+$("#login-pass").addEventListener("input",()=>{$("#login-go").disabled=!(state.loginWho&&$("#login-pass").value.length>0);$("#login-err").textContent="";});
+$("#login-go").addEventListener("click",()=>{state.me=state.loginWho;$("#login-pass").value="";enterApp();});
+$("#logout-btn").addEventListener("click",()=>{state.me=null;state.loginWho=null;document.querySelectorAll(".who-btn").forEach((x)=>x.classList.remove("sel"));$("#login-go").disabled=true;showLogin();});
+
+function enterApp(){$("#login").classList.add("hidden");$("#app").classList.remove("hidden");
+  $('#segment button[data-seg="theirs"]').textContent=`${PEOPLE[other(state.me)].name}'s`;
+  pickAssignee(other(state.me));render();}
+function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x;}
+function render(){renderPulse();renderList();}
+function pressingForToday(pid){const tom=startOfDay(Date.now());tom.setDate(tom.getDate()+1);
+  const list=state.tasks.filter((t)=>t.assignee===pid&&t.due_at&&new Date(t.due_at)<tom);
+  return{done:list.filter((t)=>t.done).length,total:list.length};}
+function renderPulse(){const order=[state.me,other(state.me)];
+  $("#pulse").innerHTML=order.map((pid)=>{const p=PEOPLE[pid];const{done,total}=pressingForToday(pid);
+    const pct=total?Math.round(done/total*100):0;const meTag=pid===state.me?'<span class="you">YOU</span>':"";
+    const body=total===0?'<div class="pulse-count"><span class="big">—</span></div><div class="pulse-clear">Nothing due today</div>':
+      `<div class="pulse-count"><span class="big">${done}</span><span class="small">/${total}</span></div><div class="pulse-label">done today</div><div class="pulse-bar"><span style="width:${pct}%"></span></div>`;
+    return `<div class="pulse-card ${p.cls}-bar ${pid===state.me?"me":""}"><div class="pulse-head"><span class="avatar ${p.cls}">${p.short}</span><span class="pn">${p.name}</span>${meTag}</div>${body}</div>`;
+  }).join("");}
+function whoFilter(t){if(state.segment==="mine")return t.assignee===state.me;if(state.segment==="theirs")return t.assignee===other(state.me);return true;}
+function renderList(){const tom=startOfDay(Date.now());tom.setDate(tom.getDate()+1);const today0=startOfDay(Date.now());
+  const visible=state.tasks.filter(whoFilter);const open=visible.filter((t)=>!t.done);
+  const b={overdue:[],today:[],upcoming:[],anytime:[]};
+  for(const t of open){if(!t.due_at){b.anytime.push(t);continue;}const d=new Date(t.due_at);
+    if(d<today0)b.overdue.push(t);else if(d<tom)b.today.push(t);else b.upcoming.push(t);}
+  const completed=visible.filter((t)=>t.done).sort((a,b)=>new Date(b.done_at||0)-new Date(a.done_at||0));
+  const groups=[["overdue","Overdue",b.overdue,true],["today","Due today",b.today,false],["anytime","Anytime",b.anytime,false],["upcoming","Upcoming",b.upcoming,false]].filter((g)=>g[2].length);
+  if(!groups.length&&!completed.length){$("#task-list").innerHTML='<div class="empty"><div class="em-mark">All clear</div><div class="em-line">No open tasks here.<br/>Head to <b>Assign</b> to add one.</div></div>';return;}
+  let html=groups.map(([k,label,items,over])=>`<div class="group"><div class="group-head ${over?"overdue":""}"><span class="gt">${label}</span><span class="gc">${items.length}</span></div><div class="group-items">${items.map(taskRow).join("")}</div></div>`).join("");
+  if(!groups.length){html=`<div class="empty mini"><div class="em-line">Nothing open here — all done.</div></div>`+html;}
+  if(completed.length){html+=`<div class="group completed-group"><button class="completed-toggle ${state.showCompleted?"open":""}" id="completed-toggle" type="button"><span class="gt">Completed</span><span class="gc">${completed.length}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>${state.showCompleted?`<div class="group-items">${completed.map(taskRow).join("")}</div>`:""}</div>`;}
+  $("#task-list").innerHTML=html;
+  const ct=$("#completed-toggle");if(ct)ct.addEventListener("click",()=>{state.showCompleted=!state.showCompleted;renderList();});
+  $("#task-list").querySelectorAll(".check").forEach((c)=>c.addEventListener("click",()=>onCheck(c.dataset.id)));
+  $("#task-list").querySelectorAll(".task-del").forEach((d)=>d.addEventListener("click",()=>removeTask(d.dataset.id)));}
+function taskRow(t){const a=PEOPLE[t.assignee];const by=PEOPLE[t.created_by];const dueChip=t.done?doneChipHtml(t):dueChipHtml(t);
+  const byChip=t.created_by!==t.assignee?`<span class="chip">from ${by.name}</span>`:"";
+  return `<div class="task assignee-${t.assignee} ${t.done?"done":""}"><button class="check ${t.done?"on":""}" data-id="${t.id}" aria-label="${t.done?"Reopen task":"Complete task"}"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button><div class="task-body"><div class="task-title">${esc(t.title)}</div>${t.notes?`<div class="task-notes">${esc(t.notes)}</div>`:""}${t.done&&t.remark?`<div class="task-remark">${esc(t.remark)}</div>`:""}<div class="task-meta"><span class="chip"><span class="dot ${a.cls}">${a.short}</span>${a.name}</span>${dueChip}${byChip}</div></div><button class="task-del" data-id="${t.id}" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></div>`;}
+function doneChipHtml(t){if(!t.done_at)return'<span class="chip done-chip">Done</span>';const d=new Date(t.done_at);return `<span class="chip done-chip">Done ${d.toLocaleDateString([],{day:"numeric",month:"short"})}</span>`;}
+function dueChipHtml(t){if(!t.due_at)return"";const d=new Date(t.due_at);const now=new Date();const today0=startOfDay(now);const tom=startOfDay(now);tom.setDate(tom.getDate()+1);
+  const time=d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});let label,over=false;
+  if(!t.done&&d<now){over=true;label=d<today0?`Overdue · ${d.toLocaleDateString([],{day:"numeric",month:"short"})}`:`Overdue · ${time}`;}
+  else if(d<tom){label=`Today ${time}`;}else{label=`${d.toLocaleDateString([],{day:"numeric",month:"short"})} · ${time}`;}
+  return `<span class="chip ${over?"due-over":""}">${label}</span>`;}
+function onCheck(id){const t=state.tasks.find((x)=>x.id===id);if(!t)return;if(t.done){t.done=false;t.done_at=null;t.remark=null;render();}else openRemarkSheet(t);}
+let pendingId=null;
+function openRemarkSheet(t){pendingId=t.id;$("#remark-task").textContent=t.title;$("#remark-input").value="";$("#remark-confirm").disabled=true;
+  $("#remark-sheet").classList.remove("hidden");requestAnimationFrame(()=>$("#remark-sheet").classList.add("show"));setTimeout(()=>$("#remark-input").focus(),120);}
+function closeRemarkSheet(){$("#remark-sheet").classList.remove("show");setTimeout(()=>$("#remark-sheet").classList.add("hidden"),220);pendingId=null;}
+$("#remark-input").addEventListener("input",()=>{$("#remark-confirm").disabled=$("#remark-input").value.trim().length===0;});
+$("#remark-cancel").addEventListener("click",closeRemarkSheet);
+$("#remark-sheet").addEventListener("click",(e)=>{if(e.target===$("#remark-sheet"))closeRemarkSheet();});
+$("#remark-confirm").addEventListener("click",()=>{const remark=$("#remark-input").value.trim();if(!remark||!pendingId)return;const t=state.tasks.find((x)=>x.id===pendingId);closeRemarkSheet();if(!t)return;
+  t.done=true;t.done_at=new Date().toISOString();t.remark=remark;render();toast("Done — nicely closed out");});
+function removeTask(id){state.tasks=state.tasks.filter((x)=>x.id!==id);render();toast("Task deleted");}
+let assignee=null;
+function pickAssignee(id){assignee=id;document.querySelectorAll(".who-pick button").forEach((b)=>b.classList.toggle("on",b.dataset.pick===id));}
+document.querySelectorAll(".who-pick button").forEach((b)=>b.addEventListener("click",()=>pickAssignee(b.dataset.pick)));
+document.querySelectorAll("#f-quick button").forEach((b)=>b.addEventListener("click",()=>{const q=b.dataset.q;
+  if(q==="clear"){$("#f-date").value="";$("#f-time").value="";return;}const d=new Date();
+  if(q==="tomorrow"){d.setDate(d.getDate()+1);d.setHours(9,0,0,0);}else{d.setHours(18,0,0,0);}
+  $("#f-date").value=d.toISOString().slice(0,10);$("#f-time").value=`${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;}));
+$("#f-send").addEventListener("click",()=>{const title=$("#f-title").value.trim();if(!title){toast("Add a task title first.");return;}
+  let due_at=null;if($("#f-date").value){const time=$("#f-time").value||"18:00";due_at=new Date(`${$("#f-date").value}T${time}`).toISOString();}
+  state.tasks.unshift({id:String(Date.now()),title,notes:$("#f-notes").value.trim()||null,assignee,created_by:state.me,due_at,done:false,done_at:null,remark:null});
+  $("#f-title").value="";$("#f-notes").value="";$("#f-date").value="";$("#f-time").value="";pickAssignee(other(state.me));switchTab("today");
+  toast(assignee===state.me?"Added to your list":`Assigned to ${PEOPLE[assignee].name}`);});
+function switchTab(tab){document.querySelectorAll(".tab").forEach((b)=>b.classList.toggle("on",b.dataset.tab===tab));
+  $("#tab-today").classList.toggle("hidden",tab!=="today");$("#tab-assign").classList.toggle("hidden",tab!=="assign");window.scrollTo(0,0);}
+document.querySelectorAll(".tab").forEach((b)=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+document.querySelectorAll("#segment button").forEach((b)=>b.addEventListener("click",()=>{state.segment=b.dataset.seg;document.querySelectorAll("#segment button").forEach((x)=>x.classList.toggle("on",x===b));renderList();}));
+$("#bell-btn").addEventListener("click",()=>toast("Preview only — alerts work on the deployed app."));
+$("#notif-enable").addEventListener("click",()=>{toast("Preview only — alerts work once deployed.");$("#notif-banner").classList.add("hidden");});
+$("#notif-dismiss").addEventListener("click",()=>$("#notif-banner").classList.add("hidden"));
+$("#notif-banner").classList.remove("hidden");
+function esc(s){return String(s).replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+let toastTimer;function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),3000);}
+
+</script>
+</body>
+</html>

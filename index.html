@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <title>RCNK Tracker</title>
+  <meta name="theme-color" content="#f5f2ec" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="RCNK" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <!-- ── Login ────────────────────────────────────────── -->
+  <section id="login">
+    <div class="brand-lockup">
+      <div class="wordmark"><span class="rk">RC</span><span class="nk">NK</span></div>
+      <div class="brand-sub">Two people. Everything tracked.</div>
+    </div>
+    <div class="login-card">
+      <div class="field">
+        <label>Who are you?</label>
+        <div class="who">
+          <button class="who-btn" data-who="rukmini" type="button">
+            <span class="avatar rukmini">R</span>
+            <span class="who-name">Rukmini</span>
+          </button>
+          <button class="who-btn" data-who="nikhil" type="button">
+            <span class="avatar nikhil">N</span>
+            <span class="who-name">Nikhil</span>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="login-pass" type="password" inputmode="text" autocomplete="off" placeholder="Shared password" />
+      </div>
+      <div class="login-err" id="login-err"></div>
+      <button class="btn-primary" id="login-go" type="button" disabled>Enter</button>
+    </div>
+  </section>
+
+  <!-- ── App ──────────────────────────────────────────── -->
+  <main id="app" class="hidden">
+    <header class="topbar">
+      <div class="topbar-row">
+        <div class="wm"><span class="rk">RC</span><span class="nk">NK</span></div>
+        <div class="topbar-actions">
+          <button class="icon-btn" id="bell-btn" title="Notifications" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </button>
+          <button class="icon-btn" id="logout-btn" title="Switch person" type="button" aria-label="Switch person">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Notifications prompt (shown only when not yet enabled) -->
+    <div class="notif-banner hidden" id="notif-banner">
+      <div class="nb-text"><b>Turn on alerts</b> — get pinged the moment a task lands or comes due.</div>
+      <button id="notif-enable" type="button">Enable</button>
+      <button class="nb-close" id="notif-dismiss" type="button" aria-label="Dismiss">×</button>
+    </div>
+
+    <!-- TAB: Today -->
+    <section id="tab-today">
+      <div class="pulse" id="pulse"></div>
+      <div class="segment" id="segment">
+        <button data-seg="mine" class="on" type="button">Mine</button>
+        <button data-seg="theirs" type="button">Theirs</button>
+        <button data-seg="all" type="button">All</button>
+      </div>
+      <div class="list" id="task-list"></div>
+    </section>
+
+    <!-- TAB: Assign -->
+    <section id="tab-assign" class="hidden">
+      <div class="assign-wrap">
+        <div class="assign-title">Create &amp; <span class="accent">assign</span></div>
+        <div class="field">
+          <label>Task</label>
+          <input id="f-title" type="text" placeholder="What needs doing?" />
+        </div>
+        <div class="field">
+          <label>Notes <span style="text-transform:none;font-weight:500">(optional)</span></label>
+          <textarea id="f-notes" placeholder="Any detail worth adding…"></textarea>
+        </div>
+        <div class="field">
+          <label>Assign to</label>
+          <div class="who-pick" id="f-assignee">
+            <button class="pick-rukmini" data-pick="rukmini" type="button"><span class="avatar rukmini">R</span>Rukmini</button>
+            <button class="pick-nikhil" data-pick="nikhil" type="button"><span class="avatar nikhil">N</span>Nikhil</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Due <span style="text-transform:none;font-weight:500">(optional)</span></label>
+          <div class="dt-row">
+            <input id="f-date" type="date" />
+            <input id="f-time" type="time" />
+          </div>
+          <div class="dt-quick" id="f-quick">
+            <button data-q="today" type="button">Today 6pm</button>
+            <button data-q="tomorrow" type="button">Tomorrow 9am</button>
+            <button data-q="clear" type="button">No date</button>
+          </div>
+        </div>
+        <button class="btn-primary assign-send" id="f-send" type="button">Assign task</button>
+      </div>
+    </section>
+
+    <nav class="tabbar">
+      <button class="tab on" data-tab="today" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Today
+      </button>
+      <button class="tab" data-tab="assign" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Assign
+      </button>
+    </nav>
+  </main>
+
+  <!-- Remark sheet — required note when completing a task -->
+  <div class="sheet-overlay hidden" id="remark-sheet">
+    <div class="sheet">
+      <div class="sheet-grip"></div>
+      <div class="sheet-title">Complete this task</div>
+      <div class="sheet-task" id="remark-task"></div>
+      <label for="remark-input">Remarks (required)</label>
+      <textarea id="remark-input" placeholder="What got done? Any note worth keeping on record…"></textarea>
+      <div class="sheet-actions">
+        <button class="sheet-cancel" id="remark-cancel" type="button">Cancel</button>
+        <button class="sheet-confirm" id="remark-confirm" type="button" disabled>Mark complete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/config.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
