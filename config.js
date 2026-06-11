@@ -5,13 +5,13 @@
 // ─────────────────────────────────────────────────────────────
 window.RCNK_CONFIG = {
   // TODO 1 — from Supabase → Project Settings → Data API
-  SUPABASE_URL: "https://YOUR-PROJECT-ID.supabase.co",
+  SUPABASE_URL: "https://ixpgqnkfkpmsbuhpmrkt.supabase.co",
 
   // TODO 2 — from Supabase → Project Settings → API Keys → "anon public"
-  SUPABASE_ANON_KEY: "YOUR-ANON-PUBLIC-KEY",
+  SUPABASE_ANON_KEY: "sb_publishable_g_Lv4Klru0e5VemAfuUCuA_WPFa2BFL",
 
   // TODO 3 — the one password you both type to get in. Change this.
-  SHARED_PASSWORD: "rukmininikhil",
+  SHARED_PASSWORD: "nolimits",
 
   // Already set for you — leave as is.
   VAPID_PUBLIC_KEY: "BKHYgVn4xySqyzdUABRydF6neASTeCUhIOsB1TN6tPdcvi2dpLTt2OP3rejXOh9DjOko2HU4qllM5eDf5yUoGUQ",
